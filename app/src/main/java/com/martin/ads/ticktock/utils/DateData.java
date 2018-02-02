@@ -31,6 +31,13 @@ public class DateData {
         milliSecond=0;
     }
 
+    public DateData(int hourOfDay, int minute, int second) {
+        this();
+        this.hourOfDay = hourOfDay;
+        this.minute = minute;
+        this.second = second;
+    }
+
     public DateData(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second, int milliSecond, int dayOfWeek) {
         this.year = year;
         this.month = month;

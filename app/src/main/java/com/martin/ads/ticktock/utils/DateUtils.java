@@ -27,6 +27,13 @@ public class DateUtils {
         return rt;
     }
 
+    public static Calendar addHMSWithCalendar(Calendar calendar,Calendar addC){
+        calendar.add(Calendar.HOUR_OF_DAY,addC.get(Calendar.HOUR_OF_DAY));
+        calendar.add(Calendar.MINUTE,addC.get(Calendar.MINUTE));
+        calendar.add(Calendar.SECOND,addC.get(Calendar.SECOND));
+        return calendar;
+    }
+
     @Deprecated
     public static String getLocalDatetimeStringOld(String local) {
         Calendar calendar = Calendar.getInstance();

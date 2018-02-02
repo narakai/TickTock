@@ -10,6 +10,9 @@ import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.martin.ads.ticktock.R;
+import com.martin.ads.ticktock.utils.DateData;
+import com.martin.ads.ticktock.utils.DateUtils;
+import com.martin.ads.ticktock.utils.TimeRetriever;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,7 +30,14 @@ public class AddTimerActivity extends AppCompatActivity {
                 .setCallBack(new OnDateSetListener() {
                     @Override
                     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-                        Toast.makeText(AddTimerActivity.this,getDateToString(millseconds),Toast.LENGTH_LONG).show();
+                        DateData dateData=DateUtils.getDateData().copy();
+                        Calendar curCal=dateData.toCalendar(TimeRetriever.LOCALE);
+                        Calendar addC=getDateDataFromMilSec(millseconds).toCalendar(TimeRetriever.LOCALE);
+                        String curTime="当前时间"+DateUtils.calenderToFormatStr(curCal);
+                        DateData newDateData=new DateData().setWithCalender(DateUtils.addHMSWithCalendar(curCal,addC));
+                        String nxtTime="下次提醒"+newDateData.getTimeStr();
+
+                        Toast.makeText(AddTimerActivity.this,curTime+" "+nxtTime ,Toast.LENGTH_LONG).show();
                     }
                 })
                 .setType(Type.HOURS_MINS_SECONDS)
@@ -51,12 +61,12 @@ public class AddTimerActivity extends AppCompatActivity {
     }
 
 
-    public String getDateToString(long time) {
-        Date d = new Date(time);
+    public DateData getDateDataFromMilSec(long millSecond) {
+        Date d = new Date(millSecond);
         String ret=new SimpleDateFormat("HH:mm:ss").format(d);
         int hour= Integer.parseInt(ret.substring(0,2));
-        int min= Integer.parseInt(ret.substring(3,5));
+        int minute= Integer.parseInt(ret.substring(3,5));
         int second= Integer.parseInt(ret.substring(6,ret.length()));
-        return ret;
+        return new DateData(hour,minute,second);
     }
 }

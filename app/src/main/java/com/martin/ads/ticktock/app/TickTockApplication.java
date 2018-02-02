@@ -1,6 +1,7 @@
 package com.martin.ads.ticktock.app;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.martin.ads.ticktock.utils.TimeRetriever;
 

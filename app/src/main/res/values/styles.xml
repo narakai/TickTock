@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/color_green</item>
         <item name="colorPrimaryDark">@color/color_clock_green</item>
-        <item name="colorAccent">@color/color_blue</item>
+        <item name="colorAccent">@color/color_clock_green</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -109,6 +109,11 @@ public class DigitalClockActivity extends AppCompatActivity {
                     minuteText.setText(dateData.get02Str(dateData.getMinute()));
                     secondText.setText(dateData.get02Str(dateData.getSecond()));
                     dateText.setText(dateData.getDateStr()+"  "+ dateData.getDayOfWeekStr());
+                    //TODO
+                    int h=dateData.getHourOfDay();
+                    if(h>=22 || h<=5)
+                        switchToNightMode();
+                    else switchToDayLightMode();
                 }
                 switch (state){
                     case NEW_SECOND:
@@ -352,7 +357,7 @@ public class DigitalClockActivity extends AppCompatActivity {
             setTextAlpha(0.48f);
             lightMode=Constant.LightMode.NIGHT;
             //TODO clear log.d
-            setAppBrightness(-1);
+            //setAppBrightness(-1);
         }
     }
 
@@ -361,15 +366,14 @@ public class DigitalClockActivity extends AppCompatActivity {
             setTextAlpha(1.0f);
             lightMode=Constant.LightMode.DAYLIGHT;
             //TODO
-            setAppBrightness(255);
+            //setAppBrightness(255);
         }
     }
 
     private void setTextAlpha(float alpha){
-        for(TextView textView:allTextViews){
+        for(TextView textView:allTextViews) {
             textView.setAlpha(alpha);
         }
-        secondText.setAlpha(alpha);
         settingBtn.setAlpha(alpha);
     }
 

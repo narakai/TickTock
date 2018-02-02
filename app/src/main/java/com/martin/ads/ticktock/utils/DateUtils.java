@@ -18,14 +18,13 @@ public class DateUtils {
     public static void updateTime(String locale){
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone(locale));
         cal.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
-        dateData.setYear(cal.get(Calendar.YEAR));
-        dateData.setMonth(cal.get(Calendar.MONTH) + 1);
-        dateData.setDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
-        dateData.setHourOfDay(cal.get(Calendar.HOUR_OF_DAY));
-        dateData.setMinute(cal.get(Calendar.MINUTE));
-        dateData.setSecond(cal.get(Calendar.SECOND));
-        dateData.setMilliSecond(cal.get(Calendar.MILLISECOND));
-        dateData.setDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dateData.setWithCalender(cal);
+    }
+
+    public static String calenderToFormatStr(Calendar calendar){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String rt = sdf.format(calendar.getTime());
+        return rt;
     }
 
     @Deprecated

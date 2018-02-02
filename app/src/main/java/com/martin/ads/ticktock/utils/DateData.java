@@ -1,10 +1,14 @@
 package com.martin.ads.ticktock.utils;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
 /**
  * Created by Ads on 2018/1/29.
  */
 
 public class DateData {
+    private static final String TAG = "DateData";
     private static final String WEEKDAY_CN[]={"","周日","周一","周二","周三","周四","周五","周六"};
 
     private int year;
@@ -18,6 +22,13 @@ public class DateData {
     private String dayOfWeekStr;
 
     public DateData() {
+        year=0;
+        month=0;
+        dayOfMonth=0;
+        hourOfDay=0;
+        minute=0;
+        second=0;
+        milliSecond=0;
     }
 
     public DateData(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second, int milliSecond, int dayOfWeek) {
@@ -140,5 +151,23 @@ public class DateData {
             return (b1 && b2) || (!b1 && !b2);
         }
         return false;
+    }
+
+    public Calendar toCalendar(String locale){
+        Calendar calendar=Calendar.getInstance(TimeZone.getTimeZone(locale));
+        calendar.set(year,month-1,dayOfMonth,hourOfDay,minute,second);
+        return calendar;
+    }
+
+    public DateData setWithCalender(Calendar cal){
+        setYear(cal.get(Calendar.YEAR));
+        setMonth(cal.get(Calendar.MONTH) + 1);
+        setDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
+        setHourOfDay(cal.get(Calendar.HOUR_OF_DAY));
+        setMinute(cal.get(Calendar.MINUTE));
+        setSecond(cal.get(Calendar.SECOND));
+        setMilliSecond(cal.get(Calendar.MILLISECOND));
+        setDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        return this;
     }
 }

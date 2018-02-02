@@ -5,16 +5,20 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.martin.ads.ticktock.R;
+import com.martin.ads.ticktock.adapter.ListAdapter;
 import com.martin.ads.ticktock.utils.MiscUtils;
 
 public class StartingActivity extends AppCompatActivity {
 
+    private RecyclerView timerList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,21 @@ public class StartingActivity extends AppCompatActivity {
                 MiscUtils.startActivity(StartingActivity.this, AddTimerActivity.class);
             }
         });
+
+        initViews();
+    }
+
+    private void initViews() {
+        timerList=findViewById(R.id.xrv_list);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        timerList.setLayoutManager(mLayoutManager);
+        // 需加，不然滑动不流畅
+        timerList.setNestedScrollingEnabled(false);
+        timerList.setHasFixedSize(false);
+        final ListAdapter adapter = new ListAdapter(this);
+        adapter.notifyDataSetChanged();
+        timerList.setAdapter(adapter);
     }
 
     @Override

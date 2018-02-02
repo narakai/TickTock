@@ -52,7 +52,7 @@ public class DigitalClockActivity extends AppCompatActivity {
 
     private ArrayList<TextView> allTextViews;
 
-    private static final String FONT_PATH="fonts/Verdana.ttf";
+    private static final String FONT_PATH="fonts/NotoSansBuginese-Regular.ttf";
     private Typeface typeface;
 
     private BatteryChangedReceiver batteryChangedReceiver;

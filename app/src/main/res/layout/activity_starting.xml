@@ -5,7 +5,7 @@
     xmlns:monkey="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    tools:context="com.martin.ads.ticktock.ui.StartingActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -14,6 +14,7 @@
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
+
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
@@ -21,7 +22,8 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            monkey:title=" ">
+            app:title=" "
+            app:toolbarId="@+id/home_toolbar">
             <com.martin.ads.ui.miclock.MiClockView
                 android:id="@+id/clock_view"
                 android:layout_width="match_parent"
@@ -37,9 +39,10 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_home" />
+    <include layout="@layout/content_starting" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

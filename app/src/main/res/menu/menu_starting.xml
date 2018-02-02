@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.martin.ads.ticktock.StartingActivity">
+    tools:context="com.martin.ads.ticktock.ui.StartingActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

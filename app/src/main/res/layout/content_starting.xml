@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.martin.ads.ticktock.StartingActivity"
+    tools:context="com.martin.ads.ticktock.ui.StartingActivity"
     tools:showIn="@layout/activity_starting">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        android:text="@string/large_text" />
+        android:text="fdsfdsgdfgdf" />
 
 </android.support.v4.widget.NestedScrollView>

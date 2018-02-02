@@ -1,4 +1,4 @@
-package com.martin.ads.ticktock;
+package com.martin.ads.ticktock.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.martin.ads.ticktock.ui.HomeActivity;
+import com.martin.ads.ticktock.R;
 import com.martin.ads.ticktock.utils.MiscUtils;
 
 public class StartingActivity extends AppCompatActivity {
@@ -25,9 +25,7 @@ public class StartingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                MiscUtils.startActivity(StartingActivity.this, HomeActivity.class);
+                MiscUtils.startActivity(StartingActivity.this, AddTimerActivity.class);
             }
         });
     }

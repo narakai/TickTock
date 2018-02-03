@@ -70,7 +70,7 @@
 
     <LinearLayout
         android:id="@+id/setting_view"
-        android:layout_width="wrap_content"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
         android:background="#DD000000"
         android:visibility="gone"

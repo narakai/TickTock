@@ -6,4 +6,5 @@ package com.martin.ads.ticktock.lockscreenmsg;
 
 public class LockScreenMessageActions {
     public static final String TAG_START="com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageReceiver.start";
+    public static final String TAG_STOP="com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageReceiver.stop";
 }

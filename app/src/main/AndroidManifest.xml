@@ -41,7 +41,8 @@
         <receiver android:name=".lockscreenmsg.LockScreenMessageReceiver">
             <intent-filter>
                 <!-- 监听锁屏消息 -->
-                <action android:name="com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageReceiver" />
+                <action android:name="com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageReceiver.start" />
+                <action android:name="com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageReceiver.stop" />
             </intent-filter>
         </receiver>
 

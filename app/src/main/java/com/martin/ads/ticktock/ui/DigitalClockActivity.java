@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.martin.ads.ticktock.constant.Constant;
 import com.martin.ads.ticktock.R;
+import com.martin.ads.ticktock.lockscreenmsg.MyService;
 import com.martin.ads.ticktock.utils.AnimationUtils;
 import com.martin.ads.ticktock.utils.BatteryChangedReceiver;
 import com.martin.ads.ticktock.utils.DateData;
@@ -201,7 +202,8 @@ public class DigitalClockActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 //startActivity(new Intent(DigitalClockActivity.this, AddTimerActivity.class));
-
+                //Intent intent = new Intent(DigitalClockActivity.this, MyService.class);
+                //startService(intent); //启动
                 //TODO:remove
 //                if(bb) setAppBrightness(255);
 //                else setAppBrightness(-1);

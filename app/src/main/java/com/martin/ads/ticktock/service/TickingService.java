@@ -120,6 +120,9 @@ public class TickingService extends Service {
             }
         }
         if(shouldNotify && notifyTaskModel!=null){
+            Intent stopIntent=new Intent();
+            stopIntent.setAction(LockScreenMessageActions.TAG_STOP);
+            sendBroadcast(stopIntent);
             Intent startIntent=new Intent();
             startIntent.setAction(LockScreenMessageActions.TAG_START);
             sendBroadcast(startIntent);

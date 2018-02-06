@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.martin.ads.ticktock.R;
+import com.sdsmdg.tastytoast.TastyToast;
 
 /**
  * 锁屏消息内容的activity
@@ -33,7 +34,7 @@ public class LockScreenMessageActivity extends AppCompatActivity {
         Drawable wallPaper = WallpaperManager.getInstance(this).getDrawable();
         win.setBackgroundDrawable(wallPaper);
         setContentView(R.layout.activity_message);
-
+        LockScreenActivityManager.addActivity(this);
         mContext = this;
         initView();
     }
@@ -64,9 +65,24 @@ public class LockScreenMessageActivity extends AppCompatActivity {
                 killSelf();
             }
         });
+        findViewById(R.id.btn_notice_later).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TastyToast.makeText(getApplicationContext(), "这个功能还不存在", TastyToast.LENGTH_SHORT,
+                        TastyToast.CONFUSING);
+            }
+        });
+        findViewById(R.id.btn_stop_timer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TastyToast.makeText(getApplicationContext(), "这个功能还不存在", TastyToast.LENGTH_SHORT,
+                        TastyToast.CONFUSING);
+            }
+        });
     }
 
     private void killSelf() {
+        LockScreenActivityManager.removeActivity(this);
         finish();
     }
 }

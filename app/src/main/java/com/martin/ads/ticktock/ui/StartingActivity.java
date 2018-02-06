@@ -1,6 +1,7 @@
 package com.martin.ads.ticktock.ui;
 
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
@@ -28,6 +29,7 @@ import com.martin.ads.ticktock.model.TimerModel;
 import com.martin.ads.ticktock.service.TickingService;
 import com.martin.ads.ticktock.utils.DateData;
 import com.martin.ads.ticktock.utils.DateUtils;
+import com.martin.ads.ticktock.utils.DialogUtil;
 import com.martin.ads.ticktock.utils.Logger;
 import com.martin.ads.ticktock.utils.MiscUtils;
 import com.martin.ads.ticktock.utils.TimeRetriever;
@@ -36,6 +38,8 @@ import com.sdsmdg.tastytoast.TastyToast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import moe.feng.alipay.zerosdk.AlipayZeroSdk;
 
 public class StartingActivity extends AppCompatActivity {
 
@@ -170,7 +174,7 @@ public class StartingActivity extends AppCompatActivity {
                         TastyToast.CONFUSING);
                 return true;
             case R.id.action_help:
-
+                showDonateDialog();
                 return true;
             case R.id.clear_list:
                 TimerDatabaseHelper.with(this).saveTimerListStr(FileUtils.EMPTY_FILE_STR);
@@ -198,6 +202,23 @@ public class StartingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void showDonateDialog() {
+        String htmlFileName =  "help_ch.html";
+        DialogUtil.showCustomDialogWithTwoAction(this, getSupportFragmentManager(), getString(R.string.help),htmlFileName, "help",
+                getString(R.string.close),null,
+                getString(R.string.offer_donation),new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(AlipayZeroSdk.hasInstalledAlipayClient(StartingActivity.this)){
+                            String auth="FKX08947EWPXCXJDX6YQ25";
+                                         //aex07094cljuqa36ku7ml36
+                            AlipayZeroSdk.startAlipayClient(StartingActivity.this, auth);
+                        }else{
+                            //Toast.makeText(StartingActivity.this,getString(R.string.support_exception_for_alipay), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

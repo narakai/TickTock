@@ -29,6 +29,9 @@ public class LockScreenMessageReceiver extends BroadcastReceiver {
                 alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(alarmIntent); //启动显示锁屏消息的activity
             }
+        }else if(action.equals(LockScreenMessageActions.TAG_STOP)){
+            Log.d(TAG, "onReceive: TAG_STOP");
+            LockScreenActivityManager.finishAll();
         }
     }
 }

@@ -126,14 +126,18 @@ public class CustomWebViewDialog extends DialogFragment {
             while ((str = in.readLine()) != null)
                 buf.append(str);
             in.close();
-            Logger.d("lalala", "onCreateDialog: "+str);
             final int accentColor = getArguments().getInt("accentColor");
             String formatLodString = buf.toString()
                     .replace("{style-placeholder}", "body { background-color: #ffffff; color: #000; }")
                     .replace("{link-color}", colorToHex(shiftColor(accentColor, true)))
-                    .replace("{link-color-active}", colorToHex(accentColor));
+                   // .replace("{link-color-active}", colorToHex(accentColor))
+                    ;
+            //Logger.d("lalala", "onCreateDialog: "+formatLodString);
+
             webView.loadDataWithBaseURL(null, formatLodString, "text/html", "UTF-8", null);
         } catch (Throwable e) {
+            e.printStackTrace();
+            //Logger.d("lalala","onCreateDialog: "+e.getMessage());
             webView.loadData("<h1>Unable to load</h1><p>" + e.getLocalizedMessage() + "</p>", "text/html", "UTF-8");
         }
         return dialog;

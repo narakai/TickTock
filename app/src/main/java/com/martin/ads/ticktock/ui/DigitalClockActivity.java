@@ -26,6 +26,7 @@ import com.martin.ads.ticktock.utils.Logger;
 import com.martin.ads.ticktock.utils.TimeRetriever;
 import com.martin.ads.ticktock.utils.TouchHelper;
 import com.martin.ads.ui.bubbleseekbar.BubbleSeekBar;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import java.util.ArrayList;
 
@@ -211,6 +212,10 @@ public class DigitalClockActivity extends AppCompatActivity {
 //                        .setTitle("设置成功")
 //                        .setMessage("1分20秒后提醒")
 //                        .sneakSuccess();
+//                TastyToast.makeText(getApplicationContext(), "已保存至SD卡", TastyToast.LENGTH_SHORT,
+//                        TastyToast.SUCCESS);
+                TastyToast.makeText(getApplicationContext(), "已保存至SD卡", TastyToast.LENGTH_SHORT,
+                        TastyToast.INFO);
             }
 
             @Override

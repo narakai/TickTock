@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.graphics.SweepGradient;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -182,10 +183,11 @@ public class MiClockView extends View {
         if (mode == MeasureSpec.EXACTLY) {
             result = size;
         } else {
-            result = 800;
+            result = getResources().getDisplayMetrics().widthPixels;
             if (mode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, size);
             }
+            Log.d("MiclockView","size is "+result+" "+size);
         }
         return result;
     }

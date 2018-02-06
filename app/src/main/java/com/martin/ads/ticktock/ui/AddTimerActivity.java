@@ -3,6 +3,8 @@ package com.martin.ads.ticktock.ui;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +15,8 @@ import com.martin.ads.ticktock.R;
 import com.martin.ads.ticktock.utils.DateData;
 import com.martin.ads.ticktock.utils.DateUtils;
 import com.martin.ads.ticktock.utils.TimeRetriever;
+import com.martin.ads.ui.switchbutton.SwitchButton;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,6 +30,8 @@ public class AddTimerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_add_timer);
+        getSupportActionBar().setTitle(R.string.add_timer_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         timePickerDialogHourMinuteSecond = new TimePickerDialog.Builder()
                 .setCallBack(new OnDateSetListener() {
                     @Override
@@ -36,7 +42,6 @@ public class AddTimerActivity extends AppCompatActivity {
                         String curTime="当前时间"+DateUtils.calenderToFormatStr(curCal);
                         DateData newDateData=new DateData().setWithCalender(DateUtils.addHMSWithCalendar(curCal,addC));
                         String nxtTime="下次提醒"+newDateData.getTimeStr();
-
                         Toast.makeText(AddTimerActivity.this,curTime+" "+nxtTime ,Toast.LENGTH_LONG).show();
                     }
                 })
@@ -52,10 +57,23 @@ public class AddTimerActivity extends AppCompatActivity {
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorPrimary))
                 .setWheelItemTextSize(12)
                 .build();
+
+
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 timePickerDialogHourMinuteSecond.show(getSupportFragmentManager(), "all");
+            }
+        });
+
+        SwitchButton switchButton = findViewById(R.id.vibrate_switch_btn);
+        switchButton.setChecked(true);
+        switchButton.setShadowEffect(true);//disable shadow effect
+        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                TastyToast.makeText(getApplicationContext(), "已保存至SD卡"+isChecked, TastyToast.LENGTH_SHORT,
+                        TastyToast.SUCCESS);
             }
         });
     }
@@ -68,5 +86,24 @@ public class AddTimerActivity extends AppCompatActivity {
         int minute= Integer.parseInt(ret.substring(3,5));
         int second= Integer.parseInt(ret.substring(6,ret.length()));
         return new DateData(hour,minute,second);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_timer, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.save_timer:
+                //save
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

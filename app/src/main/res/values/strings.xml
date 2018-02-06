@@ -4,4 +4,6 @@
     <string name="full_screen">全屏</string>
     <string name="help">帮助</string>
     <string name="no_timer_added">没有添加定时器</string>
+    <string name="add_timer_title">添加定时器</string>
+    <string name="action_save">保存</string>
 </resources>

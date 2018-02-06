@@ -15,7 +15,6 @@ import com.martin.ads.ticktock.R;
 import com.martin.ads.ticktock.utils.DateData;
 import com.martin.ads.ticktock.utils.DateUtils;
 import com.martin.ads.ticktock.utils.TimeRetriever;
-import com.martin.ads.ui.switchbutton.SwitchButton;
 import com.sdsmdg.tastytoast.TastyToast;
 
 import java.text.SimpleDateFormat;
@@ -59,23 +58,8 @@ public class AddTimerActivity extends AppCompatActivity {
                 .build();
 
 
-        findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePickerDialogHourMinuteSecond.show(getSupportFragmentManager(), "all");
-            }
-        });
+        //timePickerDialogHourMinuteSecond.show(getSupportFragmentManager(), "all");
 
-        SwitchButton switchButton = findViewById(R.id.vibrate_switch_btn);
-        switchButton.setChecked(true);
-        switchButton.setShadowEffect(true);//disable shadow effect
-        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                TastyToast.makeText(getApplicationContext(), "已保存至SD卡"+isChecked, TastyToast.LENGTH_SHORT,
-                        TastyToast.SUCCESS);
-            }
-        });
     }
 
 

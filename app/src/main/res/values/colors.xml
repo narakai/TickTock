@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="app_color">#ff32dac3</color>
+    <color name="color_app">#ff32dac3</color>
     <color name="color_clock_green">#ff008171</color>
     <color name="color_gray">#B4B4B4</color>
     <color name="color_green">#00b4aa</color>

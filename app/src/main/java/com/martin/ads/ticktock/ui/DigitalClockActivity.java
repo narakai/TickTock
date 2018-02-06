@@ -238,8 +238,8 @@ public class DigitalClockActivity extends AppCompatActivity {
         BubbleSeekBar bubbleSeekBar=findViewById(R.id.test_seek);
         bubbleSeekBar.getConfigBuilder()
                 .hideBubble()
-                .bubbleColor(ContextCompat.getColor(this,R.color.app_color))
-                .secondTrackColor(ContextCompat.getColor(this,R.color.app_color))
+                .bubbleColor(ContextCompat.getColor(this,R.color.color_app))
+                .secondTrackColor(ContextCompat.getColor(this,R.color.color_app))
                 .trackSize(4)
                 .touchToSeek()
                 .min(50.0f)
@@ -269,8 +269,8 @@ public class DigitalClockActivity extends AppCompatActivity {
         BubbleSeekBar bubbleSeekBar2=findViewById(R.id.test_seek2);
         bubbleSeekBar2.getConfigBuilder()
                 .hideBubble()
-                .bubbleColor(ContextCompat.getColor(this,R.color.app_color))
-                .secondTrackColor(ContextCompat.getColor(this,R.color.app_color))
+                .bubbleColor(ContextCompat.getColor(this,R.color.color_app))
+                .secondTrackColor(ContextCompat.getColor(this,R.color.color_app))
                 .trackSize(4)
                 .touchToSeek()
                 .min(5.0f)
@@ -299,8 +299,8 @@ public class DigitalClockActivity extends AppCompatActivity {
         BubbleSeekBar bubbleSeekBar3=findViewById(R.id.test_seek3);
         bubbleSeekBar3.getConfigBuilder()
                 .hideBubble()
-                .bubbleColor(ContextCompat.getColor(this,R.color.app_color))
-                .secondTrackColor(ContextCompat.getColor(this,R.color.app_color))
+                .bubbleColor(ContextCompat.getColor(this,R.color.color_app))
+                .secondTrackColor(ContextCompat.getColor(this,R.color.color_app))
                 .trackSize(4)
                 .touchToSeek()
                 .min(-1)

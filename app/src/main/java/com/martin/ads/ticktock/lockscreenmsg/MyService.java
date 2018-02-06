@@ -55,10 +55,6 @@ public class MyService extends Service {
                         e.printStackTrace();
                     }
 
-                    Intent stopIntent = new Intent();
-                    stopIntent.setAction(LockScreenMessageActions.TAG_STOP);
-                    sendBroadcast(stopIntent);
-
                     Intent startIntent=new Intent();
                     startIntent.setAction(LockScreenMessageActions.TAG_START);
                     sendBroadcast(startIntent);

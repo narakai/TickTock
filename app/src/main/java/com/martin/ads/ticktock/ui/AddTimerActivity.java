@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class AddTimerActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -98,7 +99,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
                         onDurationDataChanged();
 
                         //TODO:开启时
-                        if(true){
+                        if(false){
                             DateData dateData=DateUtils.getDateData().copy();
                             Calendar curCal=dateData.toCalendar(TimeRetriever.LOCALE);
                             String curTime="当前时间"+DateUtils.calenderToFormatStr(curCal);
@@ -143,10 +144,13 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                MiscUtils.startActivity(this, StartingActivity.class);
                 return true;
             case R.id.save_timer:
                 TimerDatabaseHelper.with(this).addTimer(
-                        new TimerModel(durationData,currentRingtoneUri,vibrateBtn.isChecked())
+                        new TimerModel(
+                                UUID.randomUUID().toString().replaceAll("-", ""),
+                                durationData,currentRingtoneUri,vibrateBtn.isChecked())
                 );
                 MiscUtils.startActivity(this, StartingActivity.class);
                 finish();

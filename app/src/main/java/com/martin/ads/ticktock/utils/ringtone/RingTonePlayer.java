@@ -30,7 +30,7 @@ public class RingTonePlayer {
     private Context mContext;
     private MediaPlayer mMediaPlayer;
 
-    RingTonePlayer(Context context) {
+    public RingTonePlayer(Context context) {
         mContext = context;
         mMediaPlayer = new MediaPlayer();
     }
@@ -41,7 +41,7 @@ public class RingTonePlayer {
      * @param uri uri of the ringtone to play.
      * @throws IOException if it cannot play the ringtone.
      */
-    void playRingtone(@NonNull Uri uri) throws IOException,
+    public void playRingtone(@NonNull Uri uri) throws IOException,
             IllegalArgumentException,
             SecurityException,
             IllegalStateException {
@@ -59,7 +59,7 @@ public class RingTonePlayer {
     /**
      * Release the {@link MediaPlayer} instance. Remember to call this method in on destroy.
      */
-    void release() {
+    public void release() {
         if (mMediaPlayer.isPlaying()) mMediaPlayer.stop();
         mMediaPlayer.release();
     }

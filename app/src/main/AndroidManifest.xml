@@ -45,9 +45,8 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".lockscreenmsg.MyService" />
         <service android:name=".service.TickingService" />
-
+        <service android:name=".lockscreenmsg.MyService"/>
         <activity android:name=".ui.DigitalClockActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 

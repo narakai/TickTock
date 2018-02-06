@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.martin.ads.ticktock.utils.DateData;
+import com.martin.ads.ticktock.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +29,13 @@ public class TimerDatabaseHelper {
         try {
             JSONArray timerList=new JSONArray(getTimerListStr());
             JSONObject timerJSONObj=new JSONObject();
+            timerJSONObj.put("uuid",timerModel.getUuid());
             timerJSONObj.put("timerTimeData",timerModel.getTimerTimeData().getTimeStr());
             timerJSONObj.put("ringtoneUri",timerModel.getRingtoneUri().toString());
             timerJSONObj.put("vibrate",timerModel.isVibrate());
-            Log.d(TAG, "addTimer obj: "+timerJSONObj.toString());
+            Logger.d(TAG, "addTimer obj: "+timerJSONObj.toString());
             timerList.put(timerJSONObj);
-            Log.d(TAG, "after addTimer list: "+timerList.toString());
+            Logger.d(TAG, "after addTimer list: "+timerList.toString());
             saveTimerListStr(timerList.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -46,10 +48,11 @@ public class TimerDatabaseHelper {
             JSONArray timerList=new JSONArray(getTimerListStr());
             for(int i=0;i<timerList.length();i++){
                 JSONObject curTimerJSONObj=timerList.getJSONObject(i);
+                String uuid=curTimerJSONObj.getString("uuid");
                 DateData timerTimeData=new DateData().setWithTimeStr(curTimerJSONObj.getString("timerTimeData"));
                 Uri ringtoneUri=Uri.parse(curTimerJSONObj.getString("ringtoneUri"));
                 boolean vibrate=Boolean.valueOf(curTimerJSONObj.getString("vibrate"));
-                timerModels.add(new TimerModel(timerTimeData,ringtoneUri,vibrate));
+                timerModels.add(new TimerModel(uuid,timerTimeData,ringtoneUri,vibrate));
             }
             return timerModels;
         } catch (JSONException e) {

@@ -187,7 +187,6 @@ public class MiClockView extends View {
             if (mode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, size);
             }
-            Log.d("MiclockView","size is "+result+" "+size);
         }
         return result;
     }

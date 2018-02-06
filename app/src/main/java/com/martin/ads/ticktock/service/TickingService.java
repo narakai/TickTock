@@ -13,10 +13,19 @@ import android.util.Log;
 import android.view.View;
 
 import com.martin.ads.ticktock.R;
+import com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageActions;
+import com.martin.ads.ticktock.model.NotifyTaskModel;
+import com.martin.ads.ticktock.model.TimerModel;
 import com.martin.ads.ticktock.ui.StartingActivity;
 import com.martin.ads.ticktock.utils.DateData;
+import com.martin.ads.ticktock.utils.DateUtils;
+import com.martin.ads.ticktock.utils.Logger;
 import com.martin.ads.ticktock.utils.TimeRetriever;
+import com.martin.ads.ticktock.utils.VibratorUtils;
+import com.martin.ads.ticktock.utils.ringtone.RingTonePlayer;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -27,19 +36,106 @@ public class TickingService extends Service {
     public final static int TICKING_ON=1;
     public final static int TICKING_OFF=3;
     private TickingBinder mBinder=new TickingBinder(TICKING_ON);
+    private ArrayList<NotifyTaskModel> notifyTaskModels;
+    private RingTonePlayer ringTonePlayer;
     public class TickingBinder extends Binder {
         private int tickingState;
 
         TickingBinder(int tickingState){this.tickingState=tickingState;}
         public int getTickingState(){return tickingState;}
         public void requestStop(){
+            ringTonePlayer.release();
             stopSelf();
+        }
+        public boolean addTask(NotifyTaskModel notifyTaskModel){
+            Logger.d(TAG, "addTask: "+notifyTaskModel.getTimerModel().getTimerTimeData().getTimeStr());
+            if(!isTimerOn(notifyTaskModel.getTimerModel())){
+                notifyTaskModels.add(notifyTaskModel);
+                updateNotification();
+                return true;
+            }else return false;
+        }
+        public void removeTask(TimerModel timerModel){
+            Logger.d(TAG, "removeTask: "+timerModel.getTimerTimeData().getTimeStr());
+            for(NotifyTaskModel notifyTaskModel:notifyTaskModels){
+                if(notifyTaskModel.getTimerModel().getUuid().equals(timerModel.getUuid())){
+                    notifyTaskModels.remove(notifyTaskModel);
+                    break;
+                }
+            }
+            updateNotification();
+        }
+        public void removeAllTask(){
+            Logger.d(TAG, "removeAllTask: ");
+            notifyTaskModels.clear();
+            updateNotification();
+        }
+
+        public boolean isTimerOn(TimerModel timerModel){
+            Logger.d(TAG, "check isTimerOn: "+timerModel.getTimerTimeData().getTimeStr());
+            for(NotifyTaskModel notifyTaskModel:notifyTaskModels){
+                if(notifyTaskModel.getTimerModel().getUuid().equals(timerModel.getUuid())){
+                    return true;
+                }
+            }
+            return false;
         }
     }
     @Override
     public void onCreate(){
         super.onCreate();
-        Log.d(TAG, "onCreate: ");
+        Logger.d(TAG, "onCreate: ");
+        notifyTaskModels=new ArrayList<>();
+
+        updateNotification();
+
+        TimeRetriever.getInstance().addTimeUpdateCallback(new TimeRetriever.OnTimeUpdateCallback() {
+            @Override
+            public void onTimeUpdate(DateData dateData, TimeRetriever.STATE state) {
+                switch (state){
+                    case NEW_SECOND:
+                        //Logger.d(TAG, "onTimeUpdate: inside service");
+                        processDateData(dateData);
+                        break;
+                    case NEW_SECOND_HALF:
+                    case NOTHING_SERIOUS:
+                    default:
+                        break;
+                }
+            }
+        });
+
+        ringTonePlayer=new RingTonePlayer(this);
+    }
+
+    private void processDateData(DateData dateData) {
+        boolean shouldNotify=false;
+        NotifyTaskModel notifyTaskModel=null;
+        for(NotifyTaskModel task:notifyTaskModels){
+            if(task.getNextNotifyDate().getTimeStr().equals(dateData.getTimeStr())){
+                shouldNotify=true;
+                notifyTaskModel=task;
+                task.setLastNotifiedDate(DateUtils.getDateData().copy());
+                task.setNextNotifyDate();
+            }
+        }
+        if(shouldNotify && notifyTaskModel!=null){
+            Intent startIntent=new Intent();
+            startIntent.setAction(LockScreenMessageActions.TAG_START);
+            sendBroadcast(startIntent);
+            if(notifyTaskModel.getTimerModel().isVibrate())
+                VibratorUtils.vibrate(this);
+            try {
+                ringTonePlayer.playRingtone(notifyTaskModel.getTimerModel().getRingtoneUri());
+            } catch (IOException e) {
+                e.printStackTrace();
+                //Cannot play ringtone
+            }
+        }
+
+    }
+
+    private void updateNotification() {
         Intent i=new Intent(this,StartingActivity.class);
         PendingIntent pi=PendingIntent.getActivity(this,0,i,0);
         Notification.Builder builder=new Notification.Builder(this);
@@ -50,28 +146,13 @@ public class TickingService extends Service {
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle(getResources().getString(R.string.app_name))
-                    .setContentText(getResources().getString(R.string.app_name)+"正在运行")
+                    .setContentText(notifyTaskModels.size()+"个定时器正在运行")
                     .setContentIntent(pi)
                     .build();
             startForeground(1,notification);
         }
-
-        TimeRetriever.getInstance().addTimeUpdateCallback(new TimeRetriever.OnTimeUpdateCallback() {
-            @Override
-            public void onTimeUpdate(DateData dateData, TimeRetriever.STATE state) {
-                switch (state){
-                    case NEW_SECOND:
-                        Log.d(TAG, "onTimeUpdate: inside service");
-                        break;
-                    case NEW_SECOND_HALF:
-                    case NOTHING_SERIOUS:
-                    default:
-                        break;
-                }
-            }
-        });
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -79,7 +160,7 @@ public class TickingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent,int flags,int startId){
-        Log.d(TAG, "onStartCommand: ");
+        Logger.d(TAG, "onStartCommand: ");
         return super.onStartCommand(intent, flags, startId);
     }
 }

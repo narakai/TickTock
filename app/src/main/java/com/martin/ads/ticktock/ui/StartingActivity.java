@@ -17,17 +17,25 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.martin.ads.ticktock.R;
 import com.martin.ads.ticktock.adapter.ListAdapter;
 import com.martin.ads.ticktock.model.FileUtils;
+import com.martin.ads.ticktock.model.NotifyTaskModel;
 import com.martin.ads.ticktock.model.TimerDatabaseHelper;
 import com.martin.ads.ticktock.model.TimerModel;
 import com.martin.ads.ticktock.service.TickingService;
+import com.martin.ads.ticktock.utils.DateData;
+import com.martin.ads.ticktock.utils.DateUtils;
+import com.martin.ads.ticktock.utils.Logger;
 import com.martin.ads.ticktock.utils.MiscUtils;
+import com.martin.ads.ticktock.utils.TimeRetriever;
+import com.martin.ads.ui.toptoast.TopToast;
 import com.sdsmdg.tastytoast.TastyToast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class StartingActivity extends AppCompatActivity {
 
@@ -37,11 +45,23 @@ public class StartingActivity extends AppCompatActivity {
 
     private ArrayList<TimerModel> timerModels;
     private Intent startIntent;
+    private ListAdapter adapter;
+    private boolean createFinish=false;
 
     private ServiceConnection connection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             tickingBinder=(TickingService.TickingBinder)service;
+            if(timerModels!=null){
+                for(TimerModel timerModel:timerModels){
+                    if(tickingBinder.isTimerOn(timerModel)){
+                        timerModel.setOn(true);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                createFinish=true;
+            }
+
         }
 
         @Override
@@ -73,6 +93,10 @@ public class StartingActivity extends AppCompatActivity {
 
         timerModels= TimerDatabaseHelper.with(this).getTimerList();
         initViews();
+        checkTimerSize();
+    }
+
+    private void checkTimerSize() {
         if(timerModels.size()==0){
             emptyView.setVisibility(View.VISIBLE);
             timerList.setVisibility(View.GONE);
@@ -92,13 +116,36 @@ public class StartingActivity extends AppCompatActivity {
         // 需加，不然滑动不流畅
         timerList.setNestedScrollingEnabled(false);
         timerList.setHasFixedSize(false);
-        ListAdapter adapter = new ListAdapter(this,timerModels);
+        adapter = new ListAdapter(this,timerModels);
         adapter.notifyDataSetChanged();
         timerList.setAdapter(adapter);
         adapter.setTimerStateListener(new ListAdapter.TimerStateListener() {
             @Override
             public void onTimerStateChanged(TimerModel timerModel, boolean isChecked) {
-                Log.d("lalala", "onTimerStateChanged: "+timerModel.toString()+" "+isChecked);
+                if(!createFinish) return;
+                if(isChecked){
+//                    if(false){
+//                        Calendar addC=timerModel.getTimerTimeData().copy().toCalendar(TimeRetriever.LOCALE);
+//                        DateData dateData= DateUtils.getDateData().copy();
+//                        Calendar curCal=dateData.toCalendar(TimeRetriever.LOCALE);
+//                        String curTime="当前时间"+DateUtils.calenderToFormatStr(curCal);
+//                        DateData newDateData=new DateData().setWithCalender(DateUtils.addHMSWithCalendar(curCal,addC));
+//                        String nxtTime="下次提醒"+newDateData.getTimeStr();
+//                    }
+                    NotifyTaskModel notifyTaskModel=new NotifyTaskModel();
+                    notifyTaskModel.setTimerModel(timerModel);
+                    notifyTaskModel.setLastNotifiedDate(DateUtils.getDateData().copy());
+                    notifyTaskModel.setNextNotifyDate();
+                    boolean ret=tickingBinder.addTask(notifyTaskModel);
+                    if(ret)
+                        TopToast.with(StartingActivity.this)
+                            .setTitle(timerModel.getTimerTimeData().getSimpleTimeStr()+"后提醒")
+                            //.setMessage(timerModel.getTimerTimeData().getSimpleTimeStr()+"后提醒")
+                            .sneakSuccess();
+                }else{
+                    tickingBinder.removeTask(timerModel);
+                }
+                Logger.d("lalala", "onTimerStateChanged: "+timerModel.toString()+" "+isChecked);
             }
         });
     }
@@ -127,7 +174,11 @@ public class StartingActivity extends AppCompatActivity {
                 return true;
             case R.id.clear_list:
                 TimerDatabaseHelper.with(this).saveTimerListStr(FileUtils.EMPTY_FILE_STR);
-                reStartActivity();
+                //reStartActivity();
+                timerModels= TimerDatabaseHelper.with(this).getTimerList();
+                adapter.notifyDataSetChanged();
+                tickingBinder.removeAllTask();
+                checkTimerSize();
                 return true;
             case R.id.exit_app:
                 tickingBinder.requestStop();
@@ -145,5 +196,11 @@ public class StartingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(connection);
     }
 }

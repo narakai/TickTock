@@ -217,14 +217,8 @@ public class DigitalClockActivity extends AppCompatActivity {
 
             @Override
             public void onScaleBegin() {
-//                TopToast.with(DigitalClockActivity.this)
-//                        .setTitle("设置成功")
-//                        .setMessage("1分20秒后提醒")
-//                        .sneakSuccess();
 //                TastyToast.makeText(getApplicationContext(), "已保存至SD卡", TastyToast.LENGTH_SHORT,
-//                        TastyToast.SUCCESS);
-                TastyToast.makeText(getApplicationContext(), "已保存至SD卡", TastyToast.LENGTH_SHORT,
-                        TastyToast.INFO);
+//                        TastyToast.INFO);
             }
 
             @Override

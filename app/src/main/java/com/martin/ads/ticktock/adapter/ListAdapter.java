@@ -34,6 +34,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.NormalTextView
     @Override
     public void onBindViewHolder(NormalTextViewHolder holder, final int position) {
         holder.timerDurationText.setText(timerModels.get(position).getTimerTimeData().getSimpleTimeStr());
+        holder.timerOnBtn.setChecked(timerModels.get(position).isOn());
         holder.timerOnBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

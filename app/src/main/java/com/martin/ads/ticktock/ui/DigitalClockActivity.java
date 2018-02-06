@@ -48,10 +48,14 @@ public class DigitalClockActivity extends AppCompatActivity {
     private TextView minuteText;
     private TextView secondText;
     private TextView colonText;
+
+    private ImageButton settingBtn;
+
     private ArrayList<TextView> timeViews;
     private LinearLayout timeTextPanel;
 
     private ArrayList<TextView> allTextViews;
+    private ArrayList<View> allViews;
 
     private static final String FONT_PATH="fonts/NotoSansBuginese-Regular.ttf";
     private Typeface typeface;
@@ -93,9 +97,27 @@ public class DigitalClockActivity extends AppCompatActivity {
 
         touchHelper=new TouchHelper(this);
 
+        windowWidth=getResources().getDisplayMetrics().widthPixels;
+
+        findViews();
+
         initViews();
 
         initTimer();
+    }
+
+    private void findViews() {
+        settingBtn=findViewById(R.id.btn_settings);
+        settingView=findViewById(R.id.setting_view);
+        batteryText=findViewById(R.id.battery_text);
+        dateText=findViewById(R.id.date_text);
+        hourText = findViewById(R.id.time_hour);
+        colonText = findViewById(R.id.time_colon);
+        minuteText = findViewById(R.id.time_minute);
+        secondText = findViewById(R.id.time_second);
+        timeTextPanel=findViewById(R.id.time_text_panel);
+        touchPanel=findViewById(R.id.touch_panel);
+
     }
 
     private void initTimer() {
@@ -140,30 +162,16 @@ public class DigitalClockActivity extends AppCompatActivity {
         registerReceiver(batteryChangedReceiver,getBatteryFilter());
     }
 
-    ImageButton settingBtn;
     private void initViews() {
-        settingBtn=findViewById(R.id.btn_settings);
-        settingView=findViewById(R.id.setting_view);
-        windowWidth=getResources().getDisplayMetrics().widthPixels;
-        batteryText=findViewById(R.id.battery_text);
-        dateText=findViewById(R.id.date_text);
         dateViews=new ArrayList<>();
         dateViews.add(dateText);
-        hourText = findViewById(R.id.time_hour);
-        colonText = findViewById(R.id.time_colon);
         colonText.setText(":");
-        minuteText = findViewById(R.id.time_minute);
-        secondText = findViewById(R.id.time_second);
         timeViews=new ArrayList<>();
         timeViews.add(hourText);
         timeViews.add(colonText);
         timeViews.add(minuteText);
         timeViews.add(secondText);
-        timeTextPanel=findViewById(R.id.time_text_panel);
         typeface= Typeface.createFromAsset(getAssets(), FONT_PATH);
-
-        touchPanel=findViewById(R.id.touch_panel);
-
         allTextViews=new ArrayList<>();
         allTextViews.addAll(dateViews);
         allTextViews.addAll(timeViews);
@@ -171,6 +179,9 @@ public class DigitalClockActivity extends AppCompatActivity {
         for(TextView textView:allTextViews){
             textView.setTextColor(Color.WHITE);
         }
+        allViews=new ArrayList<>();
+        allViews.addAll(allTextViews);
+        allViews.add(settingBtn);
         initTextSize();
         for(TextView textView:timeViews){
             textView.setTextSize(timeTextSize);
@@ -359,7 +370,7 @@ public class DigitalClockActivity extends AppCompatActivity {
 
     private void switchToNightMode(){
         if(lightMode==Constant.LightMode.DAYLIGHT){
-            setTextAlpha(0.48f);
+            setAlpha(0.48f);
             lightMode=Constant.LightMode.NIGHT;
             //TODO clear log.d
             //setAppBrightness(-1);
@@ -368,18 +379,17 @@ public class DigitalClockActivity extends AppCompatActivity {
 
     private void switchToDayLightMode(){
         if(lightMode==Constant.LightMode.NIGHT){
-            setTextAlpha(1.0f);
+            setAlpha(1.0f);
             lightMode=Constant.LightMode.DAYLIGHT;
             //TODO
             //setAppBrightness(255);
         }
     }
 
-    private void setTextAlpha(float alpha){
-        for(TextView textView:allTextViews) {
-            textView.setAlpha(alpha);
+    private void setAlpha(float alpha){
+        for(View v:allViews) {
+            v.setAlpha(alpha);
         }
-        settingBtn.setAlpha(alpha);
     }
 
     public void setAppBrightness(int brightness) {

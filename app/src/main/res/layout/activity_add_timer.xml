@@ -24,26 +24,13 @@
                 android:clickable="true"
                 android:focusable="true">
 
-                <ImageView
-                    android:id="@+id/time_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginStart="16dp"
-                    android:src="@drawable/ic_access_time_grey600_24dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginRight="32dp"
-                    android:layout_marginLeft="16dp" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_margin"
+                    android:layout_marginLeft="@dimen/list_margin"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/time_icon"
-                    android:orientation="vertical"
-                    android:layout_toRightOf="@id/time_icon">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/time_text"
@@ -54,13 +41,12 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/set_time_text"
+                        android:id="@+id/time_duration_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:textColor="@color/color_gray"
-                        android:text="00:01:00"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -68,32 +54,19 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:id="@+id/holdSleep"
+                android:id="@+id/ringtone_panel"
                 android:clickable="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_height="72dp"
                 android:focusable="true">
 
-                <ImageView
-                    android:id="@+id/holdSleep_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:src="@drawable/ic_notifications_paused_grey_600_24dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="32dp" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginStart="@dimen/list_margin"
+                    android:layout_marginLeft="@dimen/list_margin"
                     android:orientation="vertical"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/holdSleep_icon"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/holdSleep_icon">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/holdSleep_text"
@@ -106,17 +79,53 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:id="@+id/set_ring"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:textColor="@color/color_gray"
                         android:text="静音"
                         android:layout_height="wrap_content"/>
-
                 </LinearLayout>
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/vibrate_panel"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_height="48dp"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/vibrate_text"
+                    android:layout_marginStart="@dimen/list_margin"
+                    android:layout_marginLeft="@dimen/list_margin"
+                    android:textColor="@color/color_app"
+                    android:layout_width="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/vibrate_to_notify" />
+
+                <com.kyleduo.switchbutton.SwitchButton
+                    android:id="@+id/sb_vibrate"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/sb_margin"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/sb_margin"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:kswBackDrawable="@drawable/miui_back_drawable"
+                    app:kswThumbDrawable="@drawable/miui_thumb_drawable"
+                    app:kswThumbHeight="18dp"
+                    app:kswThumbRangeRatio="2"
+                    app:kswThumbWidth="18dp"/>
+            </RelativeLayout>
         </LinearLayout>
 
     </ScrollView>
+
 
 </RelativeLayout>

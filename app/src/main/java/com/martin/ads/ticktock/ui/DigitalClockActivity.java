@@ -202,8 +202,6 @@ public class DigitalClockActivity extends AppCompatActivity {
             public void onClick() {
                 //startActivity(new Intent(DigitalClockActivity.this, AddTimerActivity.class));
 
-//                Intent intent = new Intent(DigitalClockActivity.this, MyService.class);
-//                startService(intent); //启动
                 //TODO:remove
 //                if(bb) setAppBrightness(255);
 //                else setAppBrightness(-1);

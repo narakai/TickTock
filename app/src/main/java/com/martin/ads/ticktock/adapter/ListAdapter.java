@@ -5,25 +5,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.kyleduo.switchbutton.SwitchButton;
 import com.martin.ads.ticktock.R;
+import com.martin.ads.ticktock.model.TimerDatabaseHelper;
+import com.martin.ads.ticktock.model.TimerModel;
+
+import java.util.ArrayList;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.NormalTextViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
-    private String[] mTitles = null;
+    private ArrayList<TimerModel> timerModels = null;
+    private TimerStateListener timerStateListener;
 
-    public ListAdapter(Context context) {
-        mTitles = new String[]{"2123243","fdsgdfghgfh"
-                ,"2123243","fdsgdfghgfh"
-                ,"2123243","fdsgdfghgfh"
-                ,"2123243","fdsgdfghgfh"
-                ,"2123243","fdsgdfghgfh"
-                ,"2123243","fdsgdfghgfh"
-                ,"2123243","fdsgdfghgfh"
-                ,"2123243","fdsgdfghgfh"
-                , "2123243","fdsgdfghg32fh111"};
+    public ListAdapter(Context context,ArrayList<TimerModel> timerModels) {
+        this.timerModels=timerModels;
         mLayoutInflater = LayoutInflater.from(context);
     }
 
@@ -33,22 +32,37 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.NormalTextView
     }
 
     @Override
-    public void onBindViewHolder(NormalTextViewHolder holder, int position) {
-        holder.mTextView.setText(mTitles[position]);
+    public void onBindViewHolder(NormalTextViewHolder holder, final int position) {
+        holder.timerDurationText.setText(timerModels.get(position).getTimerTimeData().getSimpleTimeStr());
+        holder.timerOnBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(timerStateListener!=null)
+                    timerStateListener.onTimerStateChanged(timerModels.get(position),isChecked);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return mTitles == null ? 0 : mTitles.length;
+        return timerModels == null ? 0 : timerModels.size();
     }
 
     class NormalTextViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextView;
-
+        TextView timerDurationText;
+        SwitchButton timerOnBtn;
         NormalTextViewHolder(View view) {
             super(view);
-            mTextView = (TextView) view.findViewById(R.id.tv_text);
+            timerDurationText = view.findViewById(R.id.time_duration);
+            timerOnBtn=view.findViewById(R.id.timer_on);
         }
     }
 
+    public interface TimerStateListener{
+        void onTimerStateChanged(TimerModel timerModel,boolean isChecked);
+    }
+
+    public void setTimerStateListener(TimerStateListener timerStateListener) {
+        this.timerStateListener = timerStateListener;
+    }
 }

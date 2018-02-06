@@ -55,9 +55,13 @@ public class MyService extends Service {
                         e.printStackTrace();
                     }
 
-                    Intent intent = new Intent();
-                    intent.setAction("com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageReceiver");
-                    sendBroadcast(intent); //发送广播
+                    Intent stopIntent = new Intent();
+                    stopIntent.setAction(LockScreenMessageActions.TAG_STOP);
+                    sendBroadcast(stopIntent);
+
+                    Intent startIntent=new Intent();
+                    startIntent.setAction(LockScreenMessageActions.TAG_START);
+                    sendBroadcast(startIntent);
                 }
             }
         }).start();

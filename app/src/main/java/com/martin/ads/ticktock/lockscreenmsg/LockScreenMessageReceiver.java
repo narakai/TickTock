@@ -18,7 +18,7 @@ public class LockScreenMessageReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Logger.d(TAG, "onReceive:收到了锁屏消息 ");
         String action = intent.getAction();
-        if (action.equals("com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageReceiver")) {
+        if (action.equals(LockScreenMessageActions.TAG_START)) {
             //管理锁屏的一个服务
             KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
             if (km.inKeyguardRestrictedInputMode()) {
@@ -29,6 +29,8 @@ public class LockScreenMessageReceiver extends BroadcastReceiver {
                 alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(alarmIntent); //启动显示锁屏消息的activity
             }
+        }else if(action.equals(LockScreenMessageActions.TAG_STOP)){
+            LockScreenActivityManager.finishAll();
         }
     }
 }

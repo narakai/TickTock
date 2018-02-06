@@ -69,14 +69,14 @@
                 android:layout_weight="1"
                 android:textColor="#33CCCC"
                 android:background="#00000000"
-                android:text="稍后提醒"/>
+                android:text="@string/notify_later"/>
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textColor="#33CCCC"
                 android:background="#00000000"
-                android:text="关闭定时"/>
+                android:text="@string/stop_timer"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

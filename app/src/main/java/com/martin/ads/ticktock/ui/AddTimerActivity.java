@@ -16,16 +16,16 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.martin.ads.ticktock.R;
+import com.martin.ads.ticktock.model.TimerDatabaseHelper;
 import com.martin.ads.ticktock.model.TimerModel;
 import com.martin.ads.ticktock.utils.DateData;
 import com.martin.ads.ticktock.utils.DateUtils;
+import com.martin.ads.ticktock.utils.MiscUtils;
 import com.martin.ads.ticktock.utils.TimeRetriever;
 import com.martin.ads.ticktock.utils.ringtone.RingtoneHardCode;
 import com.martin.ads.ticktock.utils.ringtone.RingtonePickerDialog;
 import com.martin.ads.ticktock.utils.ringtone.RingtonePickerListener;
 import com.sdsmdg.tastytoast.TastyToast;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -131,10 +131,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
     public DateData getDateDataFromMilSec(long millSecond) {
         Date d = new Date(millSecond);
         String ret=new SimpleDateFormat("HH:mm:ss").format(d);
-        int hour= Integer.parseInt(ret.substring(0,2));
-        int minute= Integer.parseInt(ret.substring(3,5));
-        int second= Integer.parseInt(ret.substring(6,ret.length()));
-        return new DateData(hour,minute,second);
+        return new DateData().setWithTimeStr(ret);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,7 +145,10 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 return true;
             case R.id.save_timer:
-                new TimerModel(durationData,currentRingtoneUri,vibrateBtn.isChecked());
+                TimerDatabaseHelper.with(this).addTimer(
+                        new TimerModel(durationData,currentRingtoneUri,vibrateBtn.isChecked())
+                );
+                MiscUtils.startActivity(this, StartingActivity.class);
                 finish();
                 return true;
             default:

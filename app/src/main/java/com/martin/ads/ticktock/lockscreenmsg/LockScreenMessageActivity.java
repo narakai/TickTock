@@ -35,6 +35,7 @@ public class LockScreenMessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message);
 
         mContext = this;
+        LockScreenActivityManager.addActivity(this);
         initView();
     }
 
@@ -61,8 +62,13 @@ public class LockScreenMessageActivity extends AppCompatActivity {
         findViewById(R.id.message_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                killSelf();
             }
         });
+    }
+
+    private void killSelf() {
+        LockScreenActivityManager.removeActivity(LockScreenMessageActivity.this);
+        finish();
     }
 }

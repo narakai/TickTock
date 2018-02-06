@@ -44,7 +44,7 @@ public class TimeRetriever {
                     onTimeUpdateCallback.onTimeUpdate(dateData,state);
                 oldDateData=dateData.copy();
                 if(!stop)
-                    handler.postDelayed(this,127);
+                    handler.postDelayed(this,31);
             }
         };
         handler.post(updateTimeTask);

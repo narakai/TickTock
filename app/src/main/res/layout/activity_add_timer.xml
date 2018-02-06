@@ -33,7 +33,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/time_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/notify_time_duration"
@@ -69,7 +68,6 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/holdSleep_text"
                         android:textColor="@color/color_app"
                         android:layout_width="wrap_content"
                         android:textSize="16sp"
@@ -78,10 +76,10 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:id="@+id/set_ring"
+                        android:id="@+id/ring_text"
                         android:textSize="14sp"
                         android:textColor="@color/color_gray"
-                        android:text="静音"
+                        android:text="@string/silent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 

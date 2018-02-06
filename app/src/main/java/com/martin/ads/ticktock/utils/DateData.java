@@ -38,6 +38,17 @@ public class DateData {
         this.second = second;
     }
 
+    //00:00:00
+    public DateData setWithTimeStr(String timeStr) {
+        int hour= Integer.parseInt(timeStr.substring(0,2));
+        int minute= Integer.parseInt(timeStr.substring(3,5));
+        int second= Integer.parseInt(timeStr.substring(6,timeStr.length()));
+        this.hourOfDay=hour;
+        this.minute=minute;
+        this.second=second;
+        return this;
+    }
+
     public DateData(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second, int milliSecond, int dayOfWeek) {
         this.year = year;
         this.month = month;
@@ -176,5 +187,9 @@ public class DateData {
         setMilliSecond(cal.get(Calendar.MILLISECOND));
         setDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
         return this;
+    }
+
+    public String getSimpleTimeStr(){
+        return String.format("%02d小时 %02d分钟 %02d秒",hourOfDay,minute,second);
     }
 }

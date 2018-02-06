@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tv_text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="我是一个列表项" />
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/time_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/sb_margin"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#e0e0e0" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="#e0e0e0" />
+    </LinearLayout>
 
-</LinearLayout>
+    <com.kyleduo.switchbutton.SwitchButton
+        android:id="@+id/timer_on"
+        style="@style/SwitchButtonStyle"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/sb_margin"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/sb_margin"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:kswBackDrawable="@drawable/miui_back_drawable"
+        app:kswThumbDrawable="@drawable/miui_thumb_drawable"
+        app:kswThumbHeight="18dp"
+        app:kswThumbRangeRatio="2"
+        app:kswThumbWidth="18dp"/>
+</RelativeLayout>

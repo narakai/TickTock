@@ -14,4 +14,8 @@
     <string name="cancel">取消</string>
     <string name="silent">静音</string>
     <string name="time_duration_can_not_be_zero">提醒间隔不可为0秒</string>
+    <string name="clear_list">清空列表</string>
+    <string name="exit_app">完全退出</string>
+    <string name="notify_later">稍后提醒</string>
+    <string name="stop_timer">关闭定时</string>
 </resources>

@@ -1,11 +1,10 @@
 package com.martin.ads.ticktock.ui;
 
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +16,16 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.martin.ads.ticktock.R;
+import com.martin.ads.ticktock.model.TimerModel;
 import com.martin.ads.ticktock.utils.DateData;
 import com.martin.ads.ticktock.utils.DateUtils;
 import com.martin.ads.ticktock.utils.TimeRetriever;
+import com.martin.ads.ticktock.utils.ringtone.RingtoneHardCode;
+import com.martin.ads.ticktock.utils.ringtone.RingtonePickerDialog;
+import com.martin.ads.ticktock.utils.ringtone.RingtonePickerListener;
+import com.sdsmdg.tastytoast.TastyToast;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,11 +40,12 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
     private View ringtonePanel;
     private View vibratePanel;
     private TextView timeDurationText;
+    private TextView ringText;
     private SwitchButton vibrateBtn;
     private ArrayList<View> allViews;
 
     private DateData durationData;
-
+    private Uri currentRingtoneUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +56,14 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
 
         findViews();
         initViews();
+        initData();
+
+    }
+
+    private void initData() {
+        durationData=new DateData(0,5,0);
+        onDurationDataChanged();
+        currentRingtoneUri=RingtoneHardCode.URI_SILENT;
     }
 
     private void findViews(){
@@ -57,6 +72,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
         vibratePanel=findViewById(R.id.vibrate_panel);
         timeDurationText=findViewById(R.id.time_duration_text);
         vibrateBtn=findViewById(R.id.sb_vibrate);
+        ringText=findViewById(R.id.ring_text);
     }
 
     private void initViews(){
@@ -66,14 +82,18 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
         allViews.add(vibratePanel);
         for(View v:allViews) v.setOnClickListener(this);
 
-        durationData=new DateData(0,5,0);
-        onDurationDataChanged();
-
         timePickerDialogHourMinuteSecond = new TimePickerDialog.Builder()
                 .setCallBack(new OnDateSetListener() {
                     @Override
                     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
                         Calendar addC=getDateDataFromMilSec(millseconds).toCalendar(TimeRetriever.LOCALE);
+                        if(addC.get(Calendar.SECOND)==0 &&
+                                addC.get(Calendar.HOUR_OF_DAY)==0 &&
+                                addC.get(Calendar.MINUTE)==0){
+                            TastyToast.makeText(getApplicationContext(),getResources().getString(R.string.time_duration_can_not_be_zero) , TastyToast.LENGTH_LONG,
+                                    TastyToast.INFO);
+                            return;
+                        }
                         durationData.setWithCalender(addC);
                         onDurationDataChanged();
 
@@ -105,7 +125,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void onDurationDataChanged() {
-        timeDurationText.setText(durationData.getTimeStr());
+        timeDurationText.setText(durationData.getSimpleTimeStr());
     }
 
     public DateData getDateDataFromMilSec(long millSecond) {
@@ -128,7 +148,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 return true;
             case R.id.save_timer:
-                //TODO:save
+                new TimerModel(durationData,currentRingtoneUri,vibrateBtn.isChecked());
                 finish();
                 return true;
             default:
@@ -136,41 +156,28 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void showPickRingDialog() {
-        String[] ringList = new String[]{"Morning","卡农","空灵","天籁森林","唯美","温暖早晨"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setSingleChoiceItems(ringList, 0, new DialogInterface.OnClickListener() {
+    private void showPickRingDialog(){
+        RingtonePickerDialog.Builder ringtonePickerBuilder = new RingtonePickerDialog.Builder(getApplicationContext(), getSupportFragmentManager());
+        ringtonePickerBuilder.setTitle(getResources().getString(R.string.select_ringtone));
+        //ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_MUSIC);
+        //ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
+        //ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_RINGTONE);
+        ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NONE);
+        ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_ALARM);
+        ringtonePickerBuilder.setPositiveButtonText(getResources().getString(R.string.confirm));
+        ringtonePickerBuilder.setCancelButtonText(getResources().getString(R.string.cancel));
+        ringtonePickerBuilder.setCurrentRingtoneUri(currentRingtoneUri);
+        ringtonePickerBuilder.setPlaySampleWhileSelection(true);
+
+        ringtonePickerBuilder.setListener(new RingtonePickerListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                SharedPreferences.Editor editor = getSharedPreferences("ringCode", MODE_PRIVATE).edit();
-//                editor.putInt("key_ring", which + 1);
-//                editor.apply();
-//                playRing(which + 1);
+            public void OnRingtoneSelected(String ringtoneName, Uri ringtoneUri) {
+                currentRingtoneUri=ringtoneUri;
+                ringText.setText(ringtoneName);
             }
         });
-        builder.setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                SharedPreferences.Editor editor = getSharedPreferences("ringCode", MODE_PRIVATE).edit();
-//                editor.putInt("key_ring", which + 1);
-//                editor.apply();
-//                if (player.isPlaying()){
-//                    player.stop();
-//                    player.release();
-//                }
-            }
-        });
-        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                if (player != null && player.isPlaying()) {
-//                    player.stop();
-//                    player.release();
-//                }
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        ringtonePickerBuilder.show();
     }
     @Override
     public void onClick(View v) {

@@ -2,10 +2,12 @@ package com.martin.ads.ticktock.ui;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -74,6 +76,9 @@ public class DigitalClockActivity extends AppCompatActivity {
 
     private TimeRetriever timeRetriever;
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
     //160,160/4,35,16
     private float timeTextSize,dateTextSize,batteryTextSize;
 
@@ -100,11 +105,14 @@ public class DigitalClockActivity extends AppCompatActivity {
 
         windowWidth=getResources().getDisplayMetrics().widthPixels;
 
+        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+
         findViews();
 
         initViews();
 
         initTimer();
+
     }
 
     private void findViews() {
@@ -258,6 +266,10 @@ public class DigitalClockActivity extends AppCompatActivity {
                     textView.setTextSize(progressFloat);
                 }
                 secondText.setTextSize(progressFloat/ TIME_SECOND_SIZE_RATIO);
+                timeTextSize=progressFloat;
+                editor=sharedPreferences.edit();
+                editor.putFloat("timeTextSize",timeTextSize);
+                editor.apply();
             }
 
             @Override
@@ -288,6 +300,10 @@ public class DigitalClockActivity extends AppCompatActivity {
                 for(TextView textView:dateViews){
                     textView.setTextSize(progressFloat);
                 }
+                dateTextSize=progressFloat;
+                editor=sharedPreferences.edit();
+                editor.putFloat("dateTextSize",dateTextSize);
+                editor.apply();
             }
 
             @Override
@@ -339,6 +355,10 @@ public class DigitalClockActivity extends AppCompatActivity {
     }
 
     private void initTextSize(){
+        batteryTextSize=16;
+        timeTextSize=sharedPreferences.getFloat("timeTextSize",-1);
+        dateTextSize=sharedPreferences.getFloat("dateTextSize",-1);
+        if(timeTextSize>0) return;
         int normalSize=60;
         hourText.setTextSize(normalSize);
         secondText.setTextSize(normalSize/TIME_SECOND_SIZE_RATIO);
@@ -346,7 +366,6 @@ public class DigitalClockActivity extends AppCompatActivity {
                 +secondText.getPaint().measureText(NORMAL_SECOND_STR);
         timeTextSize=windowWidth/size*normalSize-2;
         dateTextSize=35;
-        batteryTextSize=16;
     }
     private IntentFilter getBatteryFilter() {
         IntentFilter filter = new IntentFilter();
@@ -406,4 +425,5 @@ public class DigitalClockActivity extends AppCompatActivity {
         }
         return systemBrightness;
     }
+
 }

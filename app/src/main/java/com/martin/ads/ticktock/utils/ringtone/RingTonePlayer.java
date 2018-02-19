@@ -56,6 +56,13 @@ public class RingTonePlayer {
         mMediaPlayer.start();
     }
 
+    public void stop(){
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+        }
+        mMediaPlayer.reset();
+    }
+
     /**
      * Release the {@link MediaPlayer} instance. Remember to call this method in on destroy.
      */

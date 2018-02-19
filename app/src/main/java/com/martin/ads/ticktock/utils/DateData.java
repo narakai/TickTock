@@ -140,6 +140,12 @@ public class DateData {
         return String.format("%02d:%02d:%02d",hourOfDay,minute,second);
     }
 
+    public boolean equalsInTime(DateData dateData){
+        return dateData.hourOfDay==hourOfDay
+                && dateData.minute==minute
+                && dateData.second==second;
+    }
+
     public String get02Str(int val){
         return String.format("%02d",val);
     }

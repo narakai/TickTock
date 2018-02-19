@@ -3,6 +3,7 @@ package com.martin.ads.ticktock.lockscreenmsg;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ public class LockScreenMessageActivity extends AppCompatActivity {
         //使用手机的背景
         Drawable wallPaper = WallpaperManager.getInstance(this).getDrawable();
         win.setBackgroundDrawable(wallPaper);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_message);
         LockScreenActivityManager.addActivity(this);
         mContext = this;
@@ -68,8 +70,7 @@ public class LockScreenMessageActivity extends AppCompatActivity {
         findViewById(R.id.btn_notice_later).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TastyToast.makeText(getApplicationContext(), "这个功能还不存在", TastyToast.LENGTH_SHORT,
-                        TastyToast.CONFUSING);
+                killSelf();
             }
         });
         findViewById(R.id.btn_stop_timer).setOnClickListener(new View.OnClickListener() {

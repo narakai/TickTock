@@ -60,6 +60,7 @@ public class TickingService extends Service {
             for(NotifyTaskModel notifyTaskModel:notifyTaskModels){
                 if(notifyTaskModel.getTimerModel().getUuid().equals(timerModel.getUuid())){
                     notifyTaskModels.remove(notifyTaskModel);
+                    ringTonePlayer.stop();
                     break;
                 }
             }
@@ -67,6 +68,7 @@ public class TickingService extends Service {
         }
         public void removeAllTask(){
             Logger.d(TAG, "removeAllTask: ");
+            ringTonePlayer.stop();
             notifyTaskModels.clear();
             updateNotification();
         }
@@ -108,14 +110,15 @@ public class TickingService extends Service {
         ringTonePlayer=new RingTonePlayer(this);
     }
 
-    private void processDateData(DateData dateData) {
+    private void processDateData(DateData dat) {
+        DateData dateData=dat.copy();
         boolean shouldNotify=false;
         NotifyTaskModel notifyTaskModel=null;
         for(NotifyTaskModel task:notifyTaskModels){
-            if(task.getNextNotifyDate().getTimeStr().equals(dateData.getTimeStr())){
+            if(task.getNextNotifyDate().equalsInTime(dateData)){
                 shouldNotify=true;
                 notifyTaskModel=task;
-                task.setLastNotifiedDate(DateUtils.getDateData().copy());
+                task.setLastNotifiedDate(dateData);
                 task.setNextNotifyDate();
             }
         }

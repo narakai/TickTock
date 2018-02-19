@@ -5,7 +5,7 @@ package com.martin.ads.ticktock.constant;
  */
 
 public class Constant {
-    public static final boolean DEBUG=true;
+    public static final boolean DEBUG=false;
     public enum LightMode{
         DAYLIGHT,NIGHT
     }

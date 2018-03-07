@@ -26,6 +26,7 @@ import com.martin.ads.ticktock.utils.AnimationUtils;
 import com.martin.ads.ticktock.utils.BatteryChangedReceiver;
 import com.martin.ads.ticktock.utils.DateData;
 import com.martin.ads.ticktock.utils.Logger;
+import com.martin.ads.ticktock.utils.Lunar;
 import com.martin.ads.ticktock.utils.TimeRetriever;
 import com.martin.ads.ticktock.utils.TouchHelper;
 import com.martin.ads.ui.bubbleseekbar.BubbleSeekBar;
@@ -140,7 +141,9 @@ public class DigitalClockActivity extends AppCompatActivity {
                     hourText.setText(dateData.get02Str(dateData.getHourOfDay()));
                     minuteText.setText(dateData.get02Str(dateData.getMinute()));
                     secondText.setText(dateData.get02Str(dateData.getSecond()));
-                    dateText.setText(dateData.getDateStr()+"  "+ dateData.getDayOfWeekStr());
+                    boolean showLunar=dateData.getSecond()%5==0;
+                    if(!showLunar) dateText.setText(dateData.getDateStr()+"  "+ dateData.getDayOfWeekStr());
+                    else dateText.setText(Lunar.getInstance().getLunar(dateData.toCalendar(TimeRetriever.LOCALE))+"  "+ dateData.getDayOfWeekStr());
                     //TODO
                     int h=dateData.getHourOfDay();
                     if(h>=22 || h<=5)

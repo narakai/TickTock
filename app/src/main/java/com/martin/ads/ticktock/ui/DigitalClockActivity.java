@@ -141,7 +141,7 @@ public class DigitalClockActivity extends AppCompatActivity {
                     hourText.setText(dateData.get02Str(dateData.getHourOfDay()));
                     minuteText.setText(dateData.get02Str(dateData.getMinute()));
                     secondText.setText(dateData.get02Str(dateData.getSecond()));
-                    boolean showLunar=dateData.getSecond()%5==0;
+                    boolean showLunar=dateData.getSecond()%6<3;
                     if(!showLunar) dateText.setText(dateData.getDateStr()+"  "+ dateData.getDayOfWeekStr());
                     else dateText.setText(Lunar.getInstance().getLunar(dateData.toCalendar(TimeRetriever.LOCALE))+"  "+ dateData.getDayOfWeekStr());
                     //TODO

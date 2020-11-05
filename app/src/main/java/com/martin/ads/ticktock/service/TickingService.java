@@ -16,9 +16,9 @@ import com.martin.ads.ticktock.R;
 import com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageActions;
 import com.martin.ads.ticktock.model.NotifyTaskModel;
 import com.martin.ads.ticktock.model.TimerModel;
+import com.martin.ads.ticktock.service.camera.CameraEngine;
 import com.martin.ads.ticktock.ui.StartingActivity;
 import com.martin.ads.ticktock.utils.DateData;
-import com.martin.ads.ticktock.utils.DateUtils;
 import com.martin.ads.ticktock.utils.Logger;
 import com.martin.ads.ticktock.utils.TimeRetriever;
 import com.martin.ads.ticktock.utils.VibratorUtils;
@@ -141,8 +141,7 @@ public class TickingService extends Service {
                 //Cannot play ringtone
             }
             if(notifyTaskModel.getTimerModel().isMonitor()){
-                //TODO:take picture
-                Log.d(TAG, "processDateData: take pic");
+                CameraEngine.takePicture(dat,this);
             }
         }
 

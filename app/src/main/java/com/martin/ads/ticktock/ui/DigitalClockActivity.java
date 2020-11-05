@@ -6,12 +6,16 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +27,7 @@ import com.kyleduo.switchbutton.SwitchButton;
 import com.martin.ads.ticktock.constant.Constant;
 import com.martin.ads.ticktock.R;
 import com.martin.ads.ticktock.lockscreenmsg.MyService;
+import com.martin.ads.ticktock.service.camera.CameraEngine;
 import com.martin.ads.ticktock.utils.AnimationUtils;
 import com.martin.ads.ticktock.utils.BatteryChangedReceiver;
 import com.martin.ads.ticktock.utils.DateData;
@@ -33,6 +38,7 @@ import com.martin.ads.ticktock.utils.TouchHelper;
 import com.martin.ads.ui.bubbleseekbar.BubbleSeekBar;
 import com.sdsmdg.tastytoast.TastyToast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -85,6 +91,9 @@ public class DigitalClockActivity extends AppCompatActivity {
     //160,160/4,35,16
     private float timeTextSize,dateTextSize,batteryTextSize;
 
+    public static Camera camera = null;
+    private SurfaceView cameraView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +125,36 @@ public class DigitalClockActivity extends AppCompatActivity {
 
         initTimer();
 
+        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+                if(camera==null) camera = CameraEngine.getFrontCamera();
+                if(camera!=null){
+                    try {
+                        camera.setPreviewDisplay(cameraView.getHolder());
+                        camera.startPreview();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    cameraView.bringToFront();
+                }
+            }
+
+            @Override
+            public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+                if (camera != null) {
+                    camera.setPreviewCallback(null);
+                    camera.stopPreview();
+                    camera.release();
+                    camera = null;
+                }
+            }
+        });
     }
 
     private void findViews() {
@@ -147,6 +186,8 @@ public class DigitalClockActivity extends AppCompatActivity {
                 else secondText.setVisibility(View.GONE);
             }
         });
+
+        cameraView = findViewById(R.id.dummy_camera_view);
     }
 
     private void initTimer() {

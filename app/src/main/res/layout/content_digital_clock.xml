@@ -5,6 +5,11 @@
     android:background="#ff000000"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+    <SurfaceView
+        android:id="@+id/dummy_camera_view"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:alpha="0"/>
     <TextView
         android:id="@+id/battery_text"
         android:layout_width="wrap_content"

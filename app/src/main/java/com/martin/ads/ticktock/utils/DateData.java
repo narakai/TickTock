@@ -198,4 +198,12 @@ public class DateData {
     public String getSimpleTimeStr(){
         return String.format("%02d小时 %02d分钟 %02d秒",hourOfDay,minute,second);
     }
+
+    public String getDateTimeStr(){
+        return String.format("%02d%02d%02d",year,month,dayOfMonth);
+    }
+
+    public String getFullTimeStr(){
+        return String.format("%02d%02d%02d-%02d%02d%02d",year,month,dayOfMonth,hourOfDay,minute,second);
+    }
 }

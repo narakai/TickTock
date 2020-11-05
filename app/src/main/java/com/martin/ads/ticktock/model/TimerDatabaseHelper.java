@@ -33,6 +33,7 @@ public class TimerDatabaseHelper {
             timerJSONObj.put("timerTimeData",timerModel.getTimerTimeData().getTimeStr());
             timerJSONObj.put("ringtoneUri",timerModel.getRingtoneUri().toString());
             timerJSONObj.put("vibrate",timerModel.isVibrate());
+            timerJSONObj.put("monitor",timerModel.isMonitor());
             Logger.d(TAG, "addTimer obj: "+timerJSONObj.toString());
             timerList.put(timerJSONObj);
             Logger.d(TAG, "after addTimer list: "+timerList.toString());
@@ -52,7 +53,9 @@ public class TimerDatabaseHelper {
                 DateData timerTimeData=new DateData().setWithTimeStr(curTimerJSONObj.getString("timerTimeData"));
                 Uri ringtoneUri=Uri.parse(curTimerJSONObj.getString("ringtoneUri"));
                 boolean vibrate=Boolean.valueOf(curTimerJSONObj.getString("vibrate"));
-                timerModels.add(new TimerModel(uuid,timerTimeData,ringtoneUri,vibrate));
+                boolean monitor=Boolean.valueOf(curTimerJSONObj.getString("monitor"));
+                timerModels.add(new TimerModel(uuid,timerTimeData,ringtoneUri,vibrate,monitor));
+//                Log.d(TAG, "getTimerList: "+timerModels.get(timerModels.size()-1).toString());
             }
             return timerModels;
         } catch (JSONException e) {

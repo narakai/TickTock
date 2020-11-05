@@ -40,9 +40,11 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
     private View timeDurationPanel;
     private View ringtonePanel;
     private View vibratePanel;
+    private View monitorPanel;
     private TextView timeDurationText;
     private TextView ringText;
     private SwitchButton vibrateBtn;
+    private SwitchButton monitorBtn;
     private ArrayList<View> allViews;
 
     private DateData durationData;
@@ -71,8 +73,10 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
         timeDurationPanel=findViewById(R.id.time_duration_panel);
         ringtonePanel=findViewById(R.id.ringtone_panel);
         vibratePanel=findViewById(R.id.vibrate_panel);
+        monitorPanel=findViewById(R.id.monitor_panel);
         timeDurationText=findViewById(R.id.time_duration_text);
         vibrateBtn=findViewById(R.id.sb_vibrate);
+        monitorBtn=findViewById(R.id.sb_monitor);
         ringText=findViewById(R.id.ring_text);
     }
 
@@ -81,6 +85,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
         allViews.add(timeDurationPanel);
         allViews.add(ringtonePanel);
         allViews.add(vibratePanel);
+        allViews.add(monitorPanel);
         for(View v:allViews) v.setOnClickListener(this);
 
         timePickerDialogHourMinuteSecond = new TimePickerDialog.Builder()
@@ -123,6 +128,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
                 .build();
 
         vibrateBtn.setChecked(true);
+        monitorBtn.setChecked(true);
     }
 
     private void onDurationDataChanged() {
@@ -150,7 +156,7 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
                 TimerDatabaseHelper.with(this).addTimer(
                         new TimerModel(
                                 UUID.randomUUID().toString().replaceAll("-", ""),
-                                durationData,currentRingtoneUri,vibrateBtn.isChecked())
+                                durationData,currentRingtoneUri,vibrateBtn.isChecked(),monitorBtn.isChecked())
                 );
                 MiscUtils.startActivity(this, StartingActivity.class);
                 finish();
@@ -194,6 +200,9 @@ public class AddTimerActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.vibrate_panel:
                 vibrateBtn.setChecked(!vibrateBtn.isChecked());
+                break;
+            case R.id.monitor_panel:
+                monitorBtn.setChecked(!monitorBtn.isChecked());
                 break;
         }
     }

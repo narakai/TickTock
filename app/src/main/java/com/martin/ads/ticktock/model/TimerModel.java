@@ -13,12 +13,14 @@ public class TimerModel {
     private DateData timerTimeData;
     private Uri ringtoneUri;
     private boolean vibrate;
+    private boolean monitor;
     private boolean on;
-    public TimerModel(String uuid, DateData timerTimeData, Uri ringtoneUri, boolean vibrate) {
+    public TimerModel(String uuid, DateData timerTimeData, Uri ringtoneUri, boolean vibrate,boolean monitor) {
         this.uuid = uuid;
         this.timerTimeData = timerTimeData;
         this.ringtoneUri = ringtoneUri;
         this.vibrate = vibrate;
+        this.monitor = monitor;
     }
 
     public String getUuid() {
@@ -49,6 +51,10 @@ public class TimerModel {
         return vibrate;
     }
 
+    public boolean isMonitor() {
+        return monitor;
+    }
+
     public void setVibrate(boolean vibrate) {
         this.vibrate = vibrate;
     }
@@ -66,6 +72,7 @@ public class TimerModel {
         return  " Time: "+timerTimeData.getTimeStr()+"\n"+
                 " Uri: "+ringtoneUri.toString()+"\n"+
                 " Vibrate: "+vibrate+"\n"+
+                " Monitor: "+monitor+"\n"+
                 " uuid: "+uuid+"\n";
     }
 }

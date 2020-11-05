@@ -23,6 +23,7 @@ import com.martin.ads.ticktock.utils.Logger;
 import com.martin.ads.ticktock.utils.TimeRetriever;
 import com.martin.ads.ticktock.utils.VibratorUtils;
 import com.martin.ads.ticktock.utils.ringtone.RingTonePlayer;
+import com.martin.ads.ticktock.utils.ringtone.RingtoneHardCode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class TickingService extends Service {
                 task.setNextNotifyDate();
             }
         }
-        if(shouldNotify && notifyTaskModel!=null){
+        if(shouldNotify){
             Intent stopIntent=new Intent();
             stopIntent.setAction(LockScreenMessageActions.TAG_STOP);
             sendBroadcast(stopIntent);
@@ -132,10 +133,16 @@ public class TickingService extends Service {
             if(notifyTaskModel.getTimerModel().isVibrate())
                 VibratorUtils.vibrate(this);
             try {
-                ringTonePlayer.playRingtone(notifyTaskModel.getTimerModel().getRingtoneUri());
+                if(!notifyTaskModel.getTimerModel().getRingtoneUri().toString().equals(RingtoneHardCode.URI_SILENT.toString())){
+                    ringTonePlayer.playRingtone(notifyTaskModel.getTimerModel().getRingtoneUri());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 //Cannot play ringtone
+            }
+            if(notifyTaskModel.getTimerModel().isMonitor()){
+                //TODO:take picture
+                Log.d(TAG, "processDateData: take pic");
             }
         }
 

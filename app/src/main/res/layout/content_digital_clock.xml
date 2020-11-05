@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ff000000"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <TextView
         android:id="@+id/battery_text"
@@ -51,7 +52,8 @@
         <TextView
             android:id="@+id/time_second"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <View
@@ -102,5 +104,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/test_seek3"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="显示秒数："
+            android:textColor="@color/color_blue"/>
+        <com.kyleduo.switchbutton.SwitchButton
+            android:id="@+id/btn_show_second"
+            style="@style/SwitchButtonStyle"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/sb_margin"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/sb_margin"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            app:kswBackDrawable="@drawable/miui_back_drawable"
+            app:kswThumbDrawable="@drawable/miui_thumb_drawable"
+            app:kswThumbHeight="18dp"
+            app:kswThumbRangeRatio="2"
+            app:kswThumbWidth="18dp"/>
     </LinearLayout>
 </RelativeLayout>

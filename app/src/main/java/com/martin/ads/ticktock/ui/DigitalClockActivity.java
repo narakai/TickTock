@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.kyleduo.switchbutton.SwitchButton;
 import com.martin.ads.ticktock.constant.Constant;
 import com.martin.ads.ticktock.R;
 import com.martin.ads.ticktock.lockscreenmsg.MyService;
@@ -52,6 +53,7 @@ public class DigitalClockActivity extends AppCompatActivity {
     private TextView minuteText;
     private TextView secondText;
     private TextView colonText;
+    private SwitchButton showSecondBtn;
 
     private ImageButton settingBtn;
 
@@ -61,7 +63,7 @@ public class DigitalClockActivity extends AppCompatActivity {
     private ArrayList<TextView> allTextViews;
     private ArrayList<View> allViews;
 
-    private static final String FONT_PATH="fonts/NotoSansBuginese-Regular.ttf";
+    private static final String FONT_PATH="fonts/Milibus Sb.ttf";
     private Typeface typeface;
 
     private BatteryChangedReceiver batteryChangedReceiver;
@@ -127,7 +129,24 @@ public class DigitalClockActivity extends AppCompatActivity {
         secondText = findViewById(R.id.time_second);
         timeTextPanel=findViewById(R.id.time_text_panel);
         touchPanel=findViewById(R.id.touch_panel);
+        showSecondBtn=findViewById(R.id.btn_show_second);
 
+        boolean showSecond=sharedPreferences.getBoolean("showSecond",false);
+        showSecondBtn.setChecked(showSecond);
+        if(showSecond){
+            secondText.setVisibility(View.VISIBLE);
+        }else secondText.setVisibility(View.GONE);
+        showSecondBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor=sharedPreferences.edit();
+                editor.putBoolean("showSecond",showSecondBtn.isChecked());
+                editor.apply();
+                if(showSecondBtn.isChecked())
+                    secondText.setVisibility(View.VISIBLE);
+                else secondText.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void initTimer() {
@@ -141,14 +160,15 @@ public class DigitalClockActivity extends AppCompatActivity {
                     hourText.setText(dateData.get02Str(dateData.getHourOfDay()));
                     minuteText.setText(dateData.get02Str(dateData.getMinute()));
                     secondText.setText(dateData.get02Str(dateData.getSecond()));
+
                     boolean showLunar=dateData.getSecond()%6<3;
                     if(!showLunar) dateText.setText(dateData.getDateStr()+"  "+ dateData.getDayOfWeekStr());
                     else dateText.setText(Lunar.getInstance().getLunar(dateData.toCalendar(TimeRetriever.LOCALE))+"  "+ dateData.getDayOfWeekStr());
                     //TODO
-                    int h=dateData.getHourOfDay();
-                    if(h>=22 || h<=5)
-                        switchToNightMode();
-                    else switchToDayLightMode();
+//                    int h=dateData.getHourOfDay();
+//                    if(h>=22 || h<=5)
+//                        switchToNightMode();
+//                    else switchToDayLightMode();
                 }
                 switch (state){
                     case NEW_SECOND:

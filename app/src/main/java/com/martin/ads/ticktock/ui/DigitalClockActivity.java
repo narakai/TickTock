@@ -1,5 +1,6 @@
 package com.martin.ads.ticktock.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -92,15 +93,16 @@ public class DigitalClockActivity extends AppCompatActivity {
     private float timeTextSize,dateTextSize,batteryTextSize;
 
     public static Camera camera = null;
+    public static Activity instance = null;
     private SurfaceView cameraView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Logger.d(TAG,"enter onCreate ");
+        instance = this;
         //全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         //旋转
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
@@ -490,4 +492,21 @@ public class DigitalClockActivity extends AppCompatActivity {
         return systemBrightness;
     }
 
+    public static void requestRestart(){
+        if(instance!=null && camera!=null){
+            instance.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = instance.getIntent();
+                    instance.finish();
+                    try {
+                        Thread.sleep(800);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    instance.startActivity(intent);
+                }
+            });
+        }
+    }
 }

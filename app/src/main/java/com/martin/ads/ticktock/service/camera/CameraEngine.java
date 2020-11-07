@@ -19,34 +19,26 @@ import java.io.FileOutputStream;
 public class CameraEngine {
     private static final String TAG = "CameraEngine";
 
-    public static void takePicture(final DateData dat, final Context context){
+    public static void takePicture(final String outputPath){
         Log.d(TAG, "take pic");
         Camera camera = DigitalClockActivity.camera;
-        if(camera!=null){
-            try {
-                camera.takePicture(null, null, new Camera.PictureCallback() {
-                    @Override
-                    public void onPictureTaken(byte[] bytes, Camera camera) {
-                        Log.d(TAG, "onPictureTaken: "+bytes.length);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        Log.d(TAG, "onPictureTaken: "+bitmap.getHeight()+" "+bitmap.getWidth());
-                        File parentDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/TickTock/Monitor/"+dat.getDateTimeStr());
-                        parentDir.mkdirs();
-                        File outputFile = new File(parentDir.getAbsolutePath()+"/" + dat.getFullTimeStr()+".jpg");
-                        Log.d(TAG, "onPictureTaken: "+outputFile.getAbsolutePath());
-                        BufferedOutputStream bos = null;
-                        try {
-                            bos = new BufferedOutputStream(new FileOutputStream(outputFile.getAbsolutePath()));
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 95, bos);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        bitmap.recycle();
+        try {
+            camera.takePicture(null, null, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] bytes, Camera camera) {
+                    BufferedOutputStream bos;
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    try {
+                        bos = new BufferedOutputStream(new FileOutputStream(outputPath));
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 95, bos);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                    bitmap.recycle();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

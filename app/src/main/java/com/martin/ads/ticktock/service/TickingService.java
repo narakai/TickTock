@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -17,6 +18,7 @@ import com.martin.ads.ticktock.lockscreenmsg.LockScreenMessageActions;
 import com.martin.ads.ticktock.model.NotifyTaskModel;
 import com.martin.ads.ticktock.model.TimerModel;
 import com.martin.ads.ticktock.service.camera.CameraEngine;
+import com.martin.ads.ticktock.ui.DigitalClockActivity;
 import com.martin.ads.ticktock.ui.StartingActivity;
 import com.martin.ads.ticktock.utils.DateData;
 import com.martin.ads.ticktock.utils.Logger;
@@ -25,6 +27,7 @@ import com.martin.ads.ticktock.utils.VibratorUtils;
 import com.martin.ads.ticktock.utils.ringtone.RingTonePlayer;
 import com.martin.ads.ticktock.utils.ringtone.RingtoneHardCode;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,6 +114,7 @@ public class TickingService extends Service {
         ringTonePlayer=new RingTonePlayer(this);
     }
 
+    private File fileToCheck = null;
     private void processDateData(DateData dat) {
         DateData dateData=dat.copy();
         boolean shouldNotify=false;
@@ -141,7 +145,18 @@ public class TickingService extends Service {
                 //Cannot play ringtone
             }
             if(notifyTaskModel.getTimerModel().isMonitor()){
-                CameraEngine.takePicture(dat,this);
+                File parentDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/TickTock/Monitor/"+dat.getDateTimeStr());
+                parentDir.mkdirs();
+                File outputFile = new File(parentDir.getAbsolutePath()+"/" + dat.getFullTimeStr()+".jpg");
+                if(DigitalClockActivity.camera!=null){
+                    CameraEngine.takePicture(outputFile.getAbsolutePath());
+                    if(fileToCheck!=null && !fileToCheck.exists()){
+                        //如果始终没有新照片，重启
+                        Log.d(TAG, "processDateData: "+fileToCheck.exists()+ " in" + outputFile.getAbsolutePath());
+                        DigitalClockActivity.requestRestart();
+                        fileToCheck = null;
+                    }else fileToCheck = outputFile;
+                }
             }
         }
 

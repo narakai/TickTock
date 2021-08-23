@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.martin.ads.ticktock"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 30
         versionCode 1
         versionName "0.12"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -29,7 +29,7 @@ dependencies {
     //Github
     //implementation 'com.github.angads25:filepicker:1.1.1'
     implementation 'com.sdsmdg.tastytoast:tastytoast:0.1.1'
-    implementation 'com.kyleduo.switchbutton:library:2.0.0'
+    implementation 'com.kyleduo.switchbutton:library:2.1.0'
     implementation "moe.feng:AlipayZeroSdk:1.1"
 
     testImplementation 'junit:junit:4.12'

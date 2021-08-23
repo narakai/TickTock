@@ -12,6 +12,8 @@
 
     <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <!-- targetSdkVersion = 28 (Android 9 / Pie) or above时，需要声明该权限 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- 相机相关权限-->
     <uses-permission android:name="android.permission.CAMERA" />
 

@@ -1,15 +1,23 @@
 package com.martin.ads.ticktock.service;
 
+import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
+
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -128,6 +136,7 @@ public class TickingService extends Service {
             }
         }
         if(shouldNotify){
+            sendNotification();
             Intent stopIntent=new Intent();
             stopIntent.setAction(LockScreenMessageActions.TAG_STOP);
             sendBroadcast(stopIntent);
@@ -162,21 +171,70 @@ public class TickingService extends Service {
 
     }
 
-    private void updateNotification() {
+    private NotificationManager getNotificationManager() {
+        return (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
+    private Notification getNotification(String hint) {
         Intent i=new Intent(this,StartingActivity.class);
         PendingIntent pi=PendingIntent.getActivity(this,0,i,0);
-        Notification.Builder builder=new Notification.Builder(this);
         Notification notification= null;
+
+        // Android 8.0 (API 26) 适配
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String NOTIFICATION_CHANNEL_ID = "com.martin.ads.ticktock.service";
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "TickingService",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            //闪光灯
+            channel.enableLights(true);
+            //锁屏显示通知
+            channel.setLockscreenVisibility(VISIBILITY_PUBLIC);
+            //闪关灯的灯光颜色
+            channel.setLightColor(Color.BLUE);
+            //是否允许震动
+            channel.enableVibration(false);
+            //设置可绕过 请勿打扰模式
+            channel.setBypassDnd(true);
+            NotificationManager manager = getNotificationManager();
+            assert manager != null;
+            manager.createNotificationChannel(channel);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+            notification = builder
+                    .setTicker(getResources().getString(R.string.app_name))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle(getResources().getString(R.string.app_name))
+                    .setContentText(hint+notifyTaskModels.size()+"个定时器正在运行")
+                    .setContentIntent(pi)
+                    .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                    .setCategory(Notification.CATEGORY_MESSAGE)
+                    .build();
+            return notification;
+        }
+
+        Notification.Builder builder=new Notification.Builder(this);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             notification = builder
                     .setTicker(getResources().getString(R.string.app_name))
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle(getResources().getString(R.string.app_name))
-                    .setContentText(notifyTaskModels.size()+"个定时器正在运行")
+                    .setContentText(hint+notifyTaskModels.size()+"个定时器正在运行")
                     .setContentIntent(pi)
                     .build();
-            startForeground(1,notification);
+        }
+        return notification;
+    }
+
+    private void updateNotification(){
+        startForeground(1, getNotification(""));
+    }
+
+    private void sendNotification(){
+        NotificationManager notificationManager = getNotificationManager();
+        if(null != notificationManager){
+            notificationManager.notify(2,getNotification("时间到，"));
         }
     }
 
@@ -189,5 +247,12 @@ public class TickingService extends Service {
     public int onStartCommand(Intent intent,int flags,int startId){
         Logger.d(TAG, "onStartCommand: ");
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        // 移除通知
+        stopForeground(true);
+        super.onDestroy();
     }
 }
